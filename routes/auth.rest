@@ -1,0 +1,29 @@
+POST http://localhost:8000/auth/register
+Content-Type: application/json
+
+{
+    "name": "hashique",
+    "email": "japu@japuuu.com",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+    "email": "japu@japuuu.com",
+    "password": "123456"
+}
+
+###
+
+DELETE  http://localhost:8000/auth
+
+###
+
+GET http://localhost:8000/auth
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE0YTg2YjRiNTY4Zjc4NTJkMzNkZWIiLCJuYW1lIjoiaGFzaGlxdWUiLCJlbWFpbCI6ImphcHVAamFwdXV1LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFhmL3FGc3JyTTZjU3kwTEFQc21kcC45VjN1bmJ1TzR0a3R4bXcxRTV3Wk1Ec3RvRng4eG9PIiwidXNlclR5cGUiOiJOT1JNQUwiLCJjcmVhdGVkQXQiOiIyMDIzLTAzLTE3VDE3OjUwOjM1LjYyMloiLCJfX3YiOjAsImlhdCI6MTY3OTA3NzgzMiwiZXhwIjoxNjgwMzczODMyfQ.St3-iLq8TVXSusbTXVQroYGQRqfdlykuRg7OHAYmGS0
+
+###

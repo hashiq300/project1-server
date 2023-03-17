@@ -1,5 +1,6 @@
 import express from "express"
 import mongoose from "mongoose";
+import authRouter from "./routes/authRoutes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ db.on("open", () => {
 
 
 app.use(express.json())
+app.use("/auth", authRouter)
 
 app.listen(process.env.PORT ?? 3000, () => {
     console.log(`Server listening on port ${process.env.PORT ?? 3000}`)
