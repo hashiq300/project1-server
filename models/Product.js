@@ -41,8 +41,4 @@ const productSchema = new Schema(
     }
 );
 
-// function isPositive(num) {
-//     return num >= 0;
-// }
-
 export default model("Product", productSchema);
