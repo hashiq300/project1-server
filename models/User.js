@@ -15,20 +15,6 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    address: {
-        city: {
-            type: String,
-        },
-        state: {
-            type: String,
-        },
-        pincode: {
-            type: String,
-        },
-        landmark: {
-            type: String,
-        },
-    },
     createdAt: {
         type: Date,
         required: true,
