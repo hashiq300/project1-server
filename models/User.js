@@ -15,12 +15,6 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-        createdAt: {
-            type: Date,
-            required: true,
-            default: Date.now,
-            immutable: true,
-        },
         userType: {
             type: String,
             enum: ["NORMAL", "ADMIN"],
