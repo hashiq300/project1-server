@@ -6,14 +6,16 @@ const cartRouter = Router();
 
 cartRouter.get("/", authenticateToken, async (req, res) => {
     try {
-        const cart = await Cart.findOne({
+        let cart = await Cart.findOne({
             user_id: req.user._id,
         }).populate("inventory.product");
 
-        if (!cart)
-            return res
-                .status(404)
-                .send({ message: "No cart has been created" });
+        if (!cart) {
+            cart = await Cart.create({
+                user_id: req.user._id,
+                inventory: [],
+            });
+        }
 
         return res.send(cart);
     } catch (err) {
@@ -67,8 +69,6 @@ cartRouter.post("/:productid", authenticateToken, async (req, res) => {
         const product = cart.inventory.find((products) => {
             return products.product._id.toString() === req.params.productid;
         });
-
-        console.log(product);
 
         if (product === undefined) {
             cart.inventory.push({
