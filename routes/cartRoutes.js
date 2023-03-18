@@ -100,4 +100,31 @@ cartRouter.delete("/", authenticateToken, async (req, res) => {
     }
 });
 
+cartRouter.delete("/:productid", authenticateToken, async (req, res) => {
+    try {
+        const cart = await Cart.findOne({
+            user_id: req.user._id,
+        });
+
+        if (!cart) return res.status(404).send({ message: "There is no cart" });
+
+        const prevLen = cart.inventory.length;
+
+        const newInventory = cart.inventory.filter(
+            (product) => product.product.toString() !== req.params.productid
+        );
+
+        if (prevLen === newInventory.length) {
+            return res
+                .status(404)
+                .send({ message: "The product does not exist in cart" });
+        }
+        cart.inventory = newInventory;
+        await cart.save();
+        res.send({ message: "Successfully deleted" });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
 export default cartRouter;
