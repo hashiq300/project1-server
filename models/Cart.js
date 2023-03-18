@@ -6,10 +6,11 @@ const cartSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
+            unique: true,
         },
         inventory: [
             {
-                product_id: {
+                product: {
                     type: Schema.Types.ObjectId,
                     ref: "Product",
                     required: true,

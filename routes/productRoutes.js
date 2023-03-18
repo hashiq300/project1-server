@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Product from "../models/Product.js";
-import { authenticateToken } from "./authRoutes.js";
+import { authenticateToken, checkAdmin } from "./authRoutes.js";
 
 const productRouter = Router();
 
@@ -14,11 +14,8 @@ productRouter.get("/", async (req, res) => {
     }
 });
 
-productRouter.post("/", authenticateToken, async (req, res) => {
+productRouter.post("/", authenticateToken, checkAdmin, async (req, res) => {
     try {
-        if (req.user.userType !== "ADMIN")
-            return res.status(400).send({ message: "Forbidden Access" });
-
         let product = new Product({
             name: req.body.name,
             image: req.body.image,
@@ -36,11 +33,8 @@ productRouter.post("/", authenticateToken, async (req, res) => {
     }
 });
 
-productRouter.patch("/:id", authenticateToken, async (req, res) => {
+productRouter.patch("/:id", authenticateToken, checkAdmin, async (req, res) => {
     try {
-        if (req.user.userType !== "ADMIN")
-            return res.status(400).send({ message: "Forbidden Access" });
-
         let product = Product.findById(req.body.id);
 
         if (!product)

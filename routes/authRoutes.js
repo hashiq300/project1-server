@@ -16,7 +16,7 @@ authRouter.post("/register", async (req, res) => {
         });
 
         const userData = {
-            _id: user.id,
+            _id: user._id,
             email: user.email,
             name: user.name,
             userType: user.userType,
@@ -50,7 +50,7 @@ authRouter.post("/login", async (req, res) => {
             return res.status(404).send({ message: "Invalid Credentials" });
 
         const userData = {
-            _id: user.id,
+            _id: user._id,
             email: user.email,
             name: user.name,
             userType: user.userType,
@@ -78,15 +78,27 @@ export function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) return res.status(400).send({ message: "Forbidden access" });
+    if (!token) return res.status(403).send({ message: "Forbidden access" });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err)
-            return res.status(400).send({ message: "Cannot verify token" });
+            return res.status(403).send({ message: "Cannot verify token" });
         req.user = user;
     });
 
     next();
+}
+
+export function checkAdmin(req, res, next) {
+    try {
+        if (req.user.userType === "ADMIN") {
+            next();
+        } else {
+            return res.status(403).send({ message: "Forbidden Access" });
+        }
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
 }
 
 export default authRouter;

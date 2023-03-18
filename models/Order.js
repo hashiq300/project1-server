@@ -14,7 +14,7 @@ const orderSchema = new Schema(
         },
         order_items: [
             {
-                product_id: {
+                product: {
                     type: Schema.Types.ObjectId,
                     ref: "Product",
                     required: true,
@@ -22,6 +22,7 @@ const orderSchema = new Schema(
                 count: {
                     type: Number,
                     default: 1,
+                    required: true,
                     validate: {
                         validator: (num) => {
                             return Number.isInteger(num) && num >= 1;
