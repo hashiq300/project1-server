@@ -2,9 +2,9 @@ POST http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-    "name": "hashique",
-    "email": "japu@japuuu.com",
-    "password": "123456"
+    "name": "Hashiq",
+    "email": "japu@hash.com",
+    "password": "12345655"
 }
 
 ###
@@ -13,8 +13,8 @@ POST http://localhost:8000/auth/login
 Content-Type: application/json
 
 {
-    "email": "japu@japuuu.com",
-    "password": "123456"
+    "email": "japu@hash.com",
+    "password": "12345655"
 }
 
 ###

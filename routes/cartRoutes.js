@@ -8,7 +8,7 @@ cartRouter.get("/", authenticateToken, async (req, res) => {
     try {
         let cart = await Cart.findOne({
             user_id: req.user._id,
-        }).populate("inventory.product");
+        }).populate("inventory.product", ["name", "price", "image"]);
 
         if (!cart) {
             cart = await Cart.create({

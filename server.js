@@ -4,6 +4,7 @@ import authRouter from "./routes/authRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import cors from "cors";
+import userRouter from "./routes/UserRoutes.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cors());
 app.use("/auth", authRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);
+app.use("/user", userRouter);
 
 app.listen(process.env.PORT ?? 3000, () => {
     console.log(`Server listening on port ${process.env.PORT ?? 3000}`);
