@@ -24,17 +24,6 @@ const productSchema = new Schema(
             type: String,
             required: true,
         },
-        stock: {
-            type: Number,
-            required: true,
-            default: 0,
-            validate: {
-                validator: (num) => {
-                    return Number.isInteger(num) && num >= 0;
-                },
-                message: "{VALUE} is not positive integer",
-            },
-        },
     },
     {
         timestamps: true,

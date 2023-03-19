@@ -17,9 +17,6 @@ authRouter.post("/register", async (req, res) => {
 
         const userData = {
             _id: user._id,
-            email: user.email,
-            name: user.name,
-            userType: user.userType,
         };
 
         const token = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
@@ -27,9 +24,27 @@ authRouter.post("/register", async (req, res) => {
         });
 
         return res.status(201).send({
-            userData,
+            userData: {
+                name: user.name,
+                email: user.email,
+                userType: user.userType,
+                _id: user._id,
+            },
             token,
         });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
+authRouter.get("/verify", authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select(
+            "name userType email"
+        );
+        if (!user) res.status(400).send({ message: "Invalid Token" });
+
+        res.send(user);
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
@@ -52,19 +67,19 @@ authRouter.post("/login", async (req, res) => {
 
         const userData = {
             _id: user._id,
-            email: user.email,
-            name: user.name,
-            userType: user.userType,
         };
 
         const token = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: "15d",
         });
 
-        console.log(userData,token)
-
-        return res.status(201).json({
-            userData,
+        return res.status(201).send({
+            userData: {
+                name: user.name,
+                email: user.email,
+                userType: user.userType,
+                _id: user._id,
+            },
             token,
         });
     } catch (err) {
@@ -72,16 +87,14 @@ authRouter.post("/login", async (req, res) => {
     }
 });
 
-authRouter.delete("/", async (req, res) => {
-    await User.deleteMany();
-    return res.send("ok");
-});
-
 export function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) return res.status(403).send({ message: "Forbidden access" });
+    if (!token)
+        return res
+            .status(403)
+            .send({ message: "Forbidden access at authToken" });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err)
@@ -92,12 +105,16 @@ export function authenticateToken(req, res, next) {
     next();
 }
 
-export function checkAdmin(req, res, next) {
+export async function checkAdmin(req, res, next) {
     try {
-        if (req.user.userType === "ADMIN") {
+        const user = await User.findById(req.user._id).select("userType");
+        console.log(user);
+        if (user.userType === "ADMIN") {
             next();
         } else {
-            return res.status(403).send({ message: "Forbidden Access" });
+            return res
+                .status(403)
+                .send({ message: "Forbidden Access at admin" });
         }
     } catch (err) {
         res.status(500).send({ message: err.message });

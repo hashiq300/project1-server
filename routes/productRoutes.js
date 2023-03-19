@@ -21,13 +21,14 @@ productRouter.post("/", authenticateToken, checkAdmin, async (req, res) => {
       price: req.body.price,
     });
 
-    if (req.body.description) product.description = req.body.description;
-    if (req.body.stock) product.stock = req.body.stock;
-    product = await product.save();
-    res.status(201).send(product);
-  } catch (err) {
-    res.status(400).send({ message: err.message });
-  }
+        if (req.body.description) product.description = req.body.description;
+
+        product = await product.save();
+
+        res.status(201).send(product);
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
 });
 
 productRouter.patch("/:id", authenticateToken, checkAdmin, async (req, res) => {
@@ -39,11 +40,10 @@ productRouter.patch("/:id", authenticateToken, checkAdmin, async (req, res) => {
         .status(404)
         .send({ message: "No product with id " + req.body.id });
 
-    if (req.body.image) product.image = req.body.image;
-    if (req.body.price) product.price = req.body.price;
-    if (req.body.name) product.name = req.body.name;
-    if (req.body.description) product.description = req.body.description;
-    if (req.body.stock) product.stock = req.body.stock;
+        if (req.body.image) product.image = req.body.image;
+        if (req.body.price) product.price = req.body.price;
+        if (req.body.name) product.name = req.body.name;
+        if (req.body.description) product.description = req.body.description;
 
     product = await product.save();
 
