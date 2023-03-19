@@ -23,7 +23,6 @@ productRouter.post("/", authenticateToken, checkAdmin, async (req, res) => {
         });
 
         if (req.body.description) product.description = req.body.description;
-        if (req.body.stock) product.stock = req.body.stock;
 
         product = await product.save();
 
@@ -46,7 +45,6 @@ productRouter.patch("/:id", authenticateToken, checkAdmin, async (req, res) => {
         if (req.body.price) product.price = req.body.price;
         if (req.body.name) product.name = req.body.name;
         if (req.body.description) product.description = req.body.description;
-        if (req.body.stock) product.stock = req.body.stock;
 
         product = await product.save();
 

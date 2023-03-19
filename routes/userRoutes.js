@@ -2,7 +2,6 @@ import { Router } from "express";
 import User from "../models/User.js";
 import { authenticateToken, checkAdmin } from "./authRoutes.js";
 import { compare } from "bcrypt";
-import jwt from "jsonwebtoken";
 
 const userRouter = Router();
 
@@ -12,7 +11,7 @@ userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
             .select("-password")
             .where("_id")
             .ne(req.user._id);
-        res.send(users);
+        return res.send(users);
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
@@ -20,31 +19,19 @@ userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
 
 userRouter.patch("/", authenticateToken, async (req, res) => {
     try {
-        if (!req.body.password)
-            return res
-                .status(400)
-                .send({ message: "No password has been passed" });
-
         const user = await User.findById(req.user._id);
 
         if (req.body.name) {
             user.name = req.body.name;
             req.user.name = req.body.name;
         }
-
-        const isAuth = await compare(req.body.password, user.password);
-
-        if (!isAuth)
-            return res.status(403).send({ message: "Invalid password" });
-
         await user.save();
-        const token = jwt.sign(req.user, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "15d",
-        });
 
         res.send({
-            user: req.user,
-            token,
+            name: user.name,
+            email: user.email,
+            userType: user.userType,
+            _id: user._id,
         });
     } catch (err) {
         res.status(400).send({ message: err.message });
@@ -59,12 +46,14 @@ userRouter.delete("/:id", authenticateToken, checkAdmin, async (req, res) => {
         res.status(400).send({ message: err.message });
     }
 });
+
 userRouter.delete("/", authenticateToken, async (req, res) => {
     try {
         if (!req.body.password)
             return res
                 .status(400)
                 .send({ message: "No password has been passed" });
+
         const user = await User.findById(req.user._id).select("password");
         const isAuth = await compare(req.body.password, user.password);
 

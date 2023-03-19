@@ -1,0 +1,15 @@
+GET http://localhost:8000/order
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE0YTg2YjRiNTY4Zjc4NTJkMzNkZWIiLCJlbWFpbCI6ImphcHVAamFwdXV1LmNvbSIsIm5hbWUiOiJoYXNoaXF1ZSIsInVzZXJUeXBlIjoiTk9STUFMIiwiaWF0IjoxNjc5MTQyNTExLCJleHAiOjE2ODA0Mzg1MTF9.-KyHOLXJKnPjsOMLhF3ssYeEAIQABPDQ3_qRnKmFyN4
+
+###
+POST http://localhost:8000/order
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE0YTg2YjRiNTY4Zjc4NTJkMzNkZWIiLCJlbWFpbCI6ImphcHVAamFwdXV1LmNvbSIsIm5hbWUiOiJoYXNoaXF1ZSIsInVzZXJUeXBlIjoiTk9STUFMIiwiaWF0IjoxNjc5MTQyNTExLCJleHAiOjE2ODA0Mzg1MTF9.-KyHOLXJKnPjsOMLhF3ssYeEAIQABPDQ3_qRnKmFyN4
+
+###
+PATCH http://localhost:8000/order/cancel
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE1Y2ZlNGVmYTYyNGM3NzEyOWZjMmIiLCJpYXQiOjE2NzkxNjIwMzUsImV4cCI6MTY4MDQ1ODAzNX0.0iPIp4-xvQaPn1AchiGiwsMRT9cIQjdXK5zbTkzXO4Q
+Content-Type: application/json
+
+{
+    "orderId": "6415fa5271da8102c6304202"
+}

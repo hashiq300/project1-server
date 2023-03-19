@@ -17,9 +17,6 @@ authRouter.post("/register", async (req, res) => {
 
         const userData = {
             _id: user._id,
-            email: user.email,
-            name: user.name,
-            userType: user.userType,
         };
 
         const token = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
@@ -27,7 +24,12 @@ authRouter.post("/register", async (req, res) => {
         });
 
         return res.status(201).send({
-            userData,
+            userData: {
+                name: user.name,
+                email: user.email,
+                userType: user.userType,
+                _id: user._id,
+            },
             token,
         });
     } catch (err) {
@@ -51,9 +53,6 @@ authRouter.post("/login", async (req, res) => {
 
         const userData = {
             _id: user._id,
-            email: user.email,
-            name: user.name,
-            userType: user.userType,
         };
 
         const token = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
@@ -61,7 +60,12 @@ authRouter.post("/login", async (req, res) => {
         });
 
         return res.status(201).send({
-            userData,
+            userData: {
+                name: user.name,
+                email: user.email,
+                userType: user.userType,
+                _id: user._id,
+            },
             token,
         });
     } catch (err) {
@@ -78,7 +82,10 @@ export function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) return res.status(403).send({ message: "Forbidden access" });
+    if (!token)
+        return res
+            .status(403)
+            .send({ message: "Forbidden access at authToken" });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err)
@@ -91,10 +98,13 @@ export function authenticateToken(req, res, next) {
 
 export function checkAdmin(req, res, next) {
     try {
-        if (req.user.userType === "ADMIN") {
+        const user = User.findById(req.user._id).select("userType");
+        if (user.userType === "ADMIN") {
             next();
         } else {
-            return res.status(403).send({ message: "Forbidden Access" });
+            return res
+                .status(403)
+                .send({ message: "Forbidden Access at admin" });
         }
     } catch (err) {
         res.status(500).send({ message: err.message });
