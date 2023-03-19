@@ -1,5 +1,6 @@
 import { Router } from "express";
 import User from "../models/User.js";
+import Address from "../models/Address.js";
 import { authenticateToken, checkAdmin } from "./authRoutes.js";
 import { compare } from "bcrypt";
 
@@ -14,6 +15,52 @@ userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
         return res.send(users);
     } catch (err) {
         res.status(500).send({ message: err.message });
+    }
+});
+userRouter.get("/address", authenticateToken, async (req, res) => {
+    try {
+        const address = await Address.findOne({
+            user_id: req.user._id,
+        });
+
+        if (!address)
+            return res.status(404).send({ message: "Address not found" });
+
+        res.send(address);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+userRouter.post("/address", authenticateToken, async (req, res) => {
+    try {
+        let address = await Address.findOne({
+            user_id: req.user._id,
+        });
+
+        if (!address) {
+            address = await Address.create({
+                user_id: req.user._id,
+                country: req.body.country,
+                city: req.body.city,
+                landmark: req.body.landmark,
+                state: req.body.state,
+                pincode: req.body.pincode,
+            });
+
+            res.statusCode = 201;
+        } else {
+            address.country = req.body.country;
+            address.state = req.body.state;
+            address.landmark = req.body.landmark;
+            address.city = req.body.city;
+
+            address.save();
+            res.statusCode = 200;
+        }
+
+        res.send(address);
+    } catch (err) {
+        res.status(400).send({ message: err.message });
     }
 });
 

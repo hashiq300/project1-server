@@ -3,6 +3,7 @@ import { authenticateToken, checkAdmin } from "./authRoutes.js";
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 import User from "../models/User.js";
+import Address from "../models/Address.js";
 
 const orderRouter = Router();
 
@@ -27,11 +28,19 @@ orderRouter.get("/", authenticateToken, async (req, res) => {
 
 orderRouter.post("/", authenticateToken, async (req, res) => {
     try {
+        const address = await Address.exists({
+            user_id: req.user._id,
+        });
+
+        if (!address)
+            return res.status(403).send({ message: "Address was not updated" });
+
         const cart = await Cart.findOne({
             user_id: req.user._id,
         });
 
-        if (!cart) return res.status(400).send({ message: "Invalid cart id" });
+        if (!cart)
+            return res.status(400).send({ message: "Cart doen't exist" });
 
         if (cart.inventory.length === 0) {
             return res.status(400).send({ message: "Inventory is empty" });
