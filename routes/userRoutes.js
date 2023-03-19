@@ -19,14 +19,16 @@ userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
 });
 userRouter.get("/address", authenticateToken, async (req, res) => {
     try {
-        const address = await Address.findOne({
+        let address = await Address.findOne({
             user_id: req.user._id,
         });
 
         if (!address)
-            return res.status(404).send({ message: "Address not found" });
-
-        res.send(address);
+            return res
+                .status(404)
+                .send({ message: "Address not found", addressFound: false });
+        address = address.toObject();
+        res.send({ ...address, addressFound: true });
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
