@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 
 const userRouter = Router();
 
+// for getting all user details for admin
 userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
     try {
         const users = await User.find()
@@ -18,6 +19,7 @@ userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
     }
 });
 
+// for updating user detail for user
 userRouter.patch("/", authenticateToken, async (req, res) => {
     try {
         if (!req.body.password)
@@ -51,6 +53,8 @@ userRouter.patch("/", authenticateToken, async (req, res) => {
     }
 });
 
+
+// for delete user by admin
 userRouter.delete("/:id", authenticateToken, checkAdmin, async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
@@ -59,6 +63,8 @@ userRouter.delete("/:id", authenticateToken, checkAdmin, async (req, res) => {
         res.status(400).send({ message: err.message });
     }
 });
+
+// delete user by themselves 
 userRouter.delete("/", authenticateToken, async (req, res) => {
     try {
         if (!req.body.password)

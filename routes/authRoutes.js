@@ -36,15 +36,16 @@ authRouter.post("/register", async (req, res) => {
 });
 
 authRouter.post("/login", async (req, res) => {
+    // console.log(req.body)
     try {
         const user = await User.findOne({
             email: req.body.email,
         });
-
         if (!user)
-            return res.status(404).send({ message: "Invalid Credentials" });
-
+        return res.status(404).send({ message: "Invalid Credentials" });
+        
         const isAuthenticated = await compare(req.body.password, user.password);
+        
 
         if (!isAuthenticated)
             return res.status(404).send({ message: "Invalid Credentials" });
@@ -60,7 +61,9 @@ authRouter.post("/login", async (req, res) => {
             expiresIn: "15d",
         });
 
-        return res.status(201).send({
+        console.log(userData,token)
+
+        return res.status(201).json({
             userData,
             token,
         });
