@@ -37,6 +37,19 @@ authRouter.post("/register", async (req, res) => {
     }
 });
 
+authRouter.get("/verify", authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select(
+            "name userType email"
+        );
+        if (!user) res.status(400).send({ message: "Invalid Token" });
+
+        res.send(user);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
 authRouter.post("/login", async (req, res) => {
     try {
         const user = await User.findOne({
