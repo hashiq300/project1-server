@@ -40,7 +40,7 @@ orderRouter.post("/", authenticateToken, async (req, res) => {
         });
 
         if (!cart)
-            return res.status(400).send({ message: "Cart doen't exist" });
+            return res.status(400).send({ message: "Cart doesn't exist" });
 
         if (cart.inventory.length === 0) {
             return res.status(400).send({ message: "Inventory is empty" });
