@@ -58,15 +58,14 @@ orderRouter.patch("/cancel", authenticateToken, async (req, res) => {
             return res
                 .status(400)
                 .send({ message: "no order_id have been provided" });
-        console.log(req.body);
+
         const order = await Order.findById(req.body.orderId);
 
         if (!order)
             return res
                 .status(404)
                 .send({ message: "No order available with id" });
-        console.log(req.user);
-        console.log(order.user_id);
+
         if (order.user_id.toString() !== req.user._id.toString()) {
             return res.status(403).send({ message: "Forbidden to cancel" });
         }

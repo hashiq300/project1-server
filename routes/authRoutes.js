@@ -86,11 +86,6 @@ authRouter.post("/login", async (req, res) => {
     }
 });
 
-authRouter.delete("/", async (req, res) => {
-    await User.deleteMany();
-    return res.send("ok");
-});
-
 export function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -109,9 +104,10 @@ export function authenticateToken(req, res, next) {
     next();
 }
 
-export function checkAdmin(req, res, next) {
+export async function checkAdmin(req, res, next) {
     try {
-        const user = User.findById(req.user._id).select("userType");
+        const user = await User.findById(req.user._id).select("userType");
+        console.log(user);
         if (user.userType === "ADMIN") {
             next();
         } else {

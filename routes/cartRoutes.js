@@ -52,7 +52,7 @@ cartRouter.post("/:productid", authenticateToken, async (req, res) => {
             user_id: req.user._id,
         });
         if (!cart) {
-            const cart = await Cart.create({
+            cart = await Cart.create({
                 user_id: req.user._id,
                 inventory: [
                     {
