@@ -20,21 +20,20 @@ userRouter.get("/", authenticateToken, checkAdmin, async (req, res) => {
 });
 
 userRouter.get("/address", authenticateToken, async (req, res) => {
-  console.log(req);
-  try {
-    const address = await Address.findOne({
-      user_id: req.user._id,
-    });
+    try {
+        let address = await Address.findOne({
+            user_id: req.user._id,
+        });
 
-    if (!address)
-      return res
-        .status(404)
-        .send({ message: "Address not found", addressFind: false });
-
-    res.send({address,addressFind:true});
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
+        if (!address)
+            return res
+                .status(404)
+                .send({ message: "Address not found", addressFound: false });
+        address = address.toObject();
+        res.send({ ...address, addressFound: true });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
 });
 
 userRouter.post("/address", authenticateToken, async (req, res) => {
@@ -110,7 +109,21 @@ userRouter.patch("/", authenticateToken, async (req, res) => {
   }
 });
 
-// for delete user by admin
+userRouter.patch("/:userid", authenticateToken, checkAdmin, async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.userid);
+        if(!req.body.userType) return res.status(400).send({ message: "userType not specified"});
+        user.userType = req.body.userType
+        await user.save();
+
+        res.send({ message: "Sucessfully updated user"});
+    } catch (err) {
+        res.status(400).send({ message: `${err.message} at patch/user` });
+    }
+});
+
+
 userRouter.delete("/:id", authenticateToken, checkAdmin, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);

@@ -31,9 +31,10 @@ productRouter.post("/", authenticateToken, checkAdmin, async (req, res) => {
     }
 });
 
-productRouter.patch("/:id", authenticateToken, checkAdmin, async (req, res) => {
-  try {
-    let product = Product.findById(req.body.id);
+
+productRouter.put("/:id", authenticateToken, checkAdmin, async (req, res) => {
+    try {
+        let product = await Product.findById(req.params.id).sort(["createdAt", -1]);
 
     if (!product)
       return res
@@ -45,15 +46,14 @@ productRouter.patch("/:id", authenticateToken, checkAdmin, async (req, res) => {
         if (req.body.name) product.name = req.body.name;
         if (req.body.description) product.description = req.body.description;
 
-    product = await product.save();
+
+        await product.save();
 
     res.send(product);
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
 });
-
-
 
 
 productRouter.get("/:id", async (req, res) => {
@@ -65,6 +65,15 @@ productRouter.get("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
+});
+
+productRouter.delete("/:id", authenticateToken,checkAdmin,async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.send({ message: "Product Delete Sucessfully"});
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
 });
 
 export default productRouter;

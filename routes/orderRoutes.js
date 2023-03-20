@@ -12,14 +12,13 @@ orderRouter.get("/:id", authenticateToken, async (req, res) => {
   console.log(id);
   try {
     let items = [];
-    const products = await Order.find({ user_id: id }).populate("order_items.product", [
-      "name",
-      "price",
-      "image",
-    ]);
+    const products = await Order.find({ user_id: id }).populate(
+      "order_items.product",
+      ["name", "price", "image"]
+    );
     products.forEach((item) => {
       item.order_items.forEach((oneItem) => {
-        items.push({product:oneItem,status:item.status});
+        items.push({ product: oneItem, status: item.status });
       });
     });
     res.status(200).json(items);
@@ -29,9 +28,12 @@ orderRouter.get("/:id", authenticateToken, async (req, res) => {
 });
 
 orderRouter.get("/", authenticateToken, async (req, res) => {
-
   try {
     const user = await User.findById(id).select("userType");
+    if (user && user.userType === "ADMIN") {
+      const orders = await Order.find().populate("user_id", ["name"]);
+      return res.send(orders);
+    }
 
     if (user && user.userType === "ADMIN") {
       const orders = await Order.find();
@@ -63,6 +65,7 @@ orderRouter.post("/", authenticateToken, async (req, res) => {
     });
 
     if (!cart) return res.status(400).send({ message: "Cart doen't exist" });
+    if (!cart) return res.status(400).send({ message: "Cart doesn't exist" });
 
     if (cart.inventory.length === 0) {
       return res.status(400).send({ message: "Inventory is empty" });

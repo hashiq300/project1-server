@@ -111,7 +111,6 @@ export function authenticateToken(req, res, next) {
 export async function checkAdmin(req, res, next) {
     try {
         const user = await User.findById(req.user._id).select("userType");
-        console.log(user);
         if (user.userType === "ADMIN") {
             next();
         } else {
@@ -120,7 +119,7 @@ export async function checkAdmin(req, res, next) {
                 .send({ message: "Forbidden Access at admin" });
         }
     } catch (err) {
-        res.status(500).send({ message: err.message });
+        res.status(500).send({ message: `${err.message} at admin check` });
     }
 }
 

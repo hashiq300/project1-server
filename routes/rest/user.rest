@@ -1,2 +1,21 @@
 GET http://localhost:8000/user/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE1Y2ZlNGVmYTYyNGM3NzEyOWZjMmIiLCJpYXQiOjE2NzkyMDcwNDAsImV4cCI6MTY4MDUwMzA0MH0.HY8wibehqL1LjYKaJO30XKfNd-22T1yfaRpU13lSqzw
+
+###
+
+GET http://localhost:8000/user/address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE1Y2ZlNGVmYTYyNGM3NzEyOWZjMmIiLCJpYXQiOjE2NzkyMDcwNDAsImV4cCI6MTY4MDUwMzA0MH0.HY8wibehqL1LjYKaJO30XKfNd-22T1yfaRpU13lSqzw
+
+###
+
+POST http://localhost:8000/user/address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE1Y2ZlNGVmYTYyNGM3NzEyOWZjMmIiLCJpYXQiOjE2NzkyMDcwNDAsImV4cCI6MTY4MDUwMzA0MH0.HY8wibehqL1LjYKaJO30XKfNd-22T1yfaRpU13lSqzw
+Content-Type: application/json
+
+{
+    "city": "KSD",
+    "country": "india",
+    "state": "kerala",
+    "pincode": "671122",
+    "landmark": "near gvhss"
+}

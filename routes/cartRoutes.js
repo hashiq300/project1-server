@@ -70,7 +70,7 @@ cartRouter.post("/:productid", authenticateToken, async (req, res) => {
                 .send({ message: "Cart successfully created" });
         }
         const product = cart.inventory.find((products) => {
-            return products.product._id.toString() === req.params.productid;
+            return products._id.toString() === req.params.productid;
         });
 
         if (product === undefined) {

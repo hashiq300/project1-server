@@ -15,9 +15,9 @@ const productSchema = new Schema(
             default: 0,
             validate: {
                 validator: (num) => {
-                    return Number.isInteger(num) && num >= 0;
+                    return num >= 0;
                 },
-                message: "{VALUE} is not positive integer",
+                message: "{VALUE} is not positive",
             },
         },
         image: {
