@@ -4,6 +4,7 @@ import Cart from "../models/Cart.js";
 
 const cartRouter = Router();
 
+// enter cart
 cartRouter.get("/", authenticateToken, async (req, res) => {
     try {
         let cart = await Cart.findOne({
@@ -23,6 +24,7 @@ cartRouter.get("/", authenticateToken, async (req, res) => {
     }
 });
 
+// when updating cart from cart page
 cartRouter.post("/", authenticateToken, async (req, res) => {
     try {
         let cart = await Cart.findOne({
@@ -46,6 +48,7 @@ cartRouter.post("/", authenticateToken, async (req, res) => {
     }
 });
 
+// call from productdetails page
 cartRouter.post("/:productid", authenticateToken, async (req, res) => {
     try {
         let cart = await Cart.findOne({
@@ -88,6 +91,7 @@ cartRouter.post("/:productid", authenticateToken, async (req, res) => {
     }
 });
 
+// for deleting user cart
 cartRouter.delete("/", authenticateToken, async (req, res) => {
     try {
         await Cart.deleteMany({
@@ -100,6 +104,7 @@ cartRouter.delete("/", authenticateToken, async (req, res) => {
     }
 });
 
+// when remove from cart
 cartRouter.delete("/:productid", authenticateToken, async (req, res) => {
     try {
         const cart = await Cart.findOne({

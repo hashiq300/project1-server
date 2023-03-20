@@ -37,6 +37,7 @@ authRouter.post("/register", async (req, res) => {
     }
 });
 
+
 authRouter.get("/verify", authenticateToken, async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select(
@@ -50,16 +51,19 @@ authRouter.get("/verify", authenticateToken, async (req, res) => {
     }
 });
 
+
+
 authRouter.post("/login", async (req, res) => {
+    // console.log(req.body)
     try {
         const user = await User.findOne({
             email: req.body.email,
         });
-
         if (!user)
-            return res.status(404).send({ message: "Invalid Credentials" });
-
+        return res.status(404).send({ message: "Invalid Credentials" });
+        
         const isAuthenticated = await compare(req.body.password, user.password);
+        
 
         if (!isAuthenticated)
             return res.status(404).send({ message: "Invalid Credentials" });
