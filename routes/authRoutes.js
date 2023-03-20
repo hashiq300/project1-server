@@ -37,6 +37,7 @@ authRouter.post("/register", async (req, res) => {
     }
 });
 
+
 authRouter.get("/verify", authenticateToken, async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select(
@@ -49,6 +50,8 @@ authRouter.get("/verify", authenticateToken, async (req, res) => {
         res.status(500).send({ message: err.message });
     }
 });
+
+
 
 authRouter.post("/login", async (req, res) => {
     // console.log(req.body)

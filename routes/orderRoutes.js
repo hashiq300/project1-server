@@ -7,37 +7,36 @@ import Address from "../models/Address.js";
 
 const orderRouter = Router();
 
-// orderRouter.get("/:id", authenticateToken, async (req, res) => {
-//   const { id } = req.params;
-//   console.log(id);
-//   try {
-//     let items = [];
-//     const products = await Order.find({ user_id: id }).populate("order_items", [
-//       "name",
-//       "price",
-//       "image",
-//     ]);
-//     products.forEach((item) => {
-//       item.order_items.forEach((oneItem) => {
-//         items.push(oneItem);
-//       });
-//     });
-//     res.status(200).json(items);
-//   } catch (err) {
-//     res.status(400).json(err);
-//   }
-// });
-
 orderRouter.get("/:id", authenticateToken, async (req, res) => {
-    const { id } = req.params
-    console.log(id)
+  const { id } = req.params;
+  console.log(id);
   try {
-    // const user = await User.findById(id).select("userType");
+    let items = [];
+    const products = await Order.find({ user_id: id }).populate("order_items.product", [
+      "name",
+      "price",
+      "image",
+    ]);
+    products.forEach((item) => {
+      item.order_items.forEach((oneItem) => {
+        items.push({product:oneItem,status:item.status});
+      });
+    });
+    res.status(200).json(items);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
-    // if (user && user.userType === "ADMIN") {
-    //   const orders = await Order.find();
-    //   return res.send(orders);
-    // }
+orderRouter.get("/", authenticateToken, async (req, res) => {
+
+  try {
+    const user = await User.findById(id).select("userType");
+
+    if (user && user.userType === "ADMIN") {
+      const orders = await Order.find();
+      return res.send(orders);
+    }
 
     const orders = await Order.find({
       user_id: id,
