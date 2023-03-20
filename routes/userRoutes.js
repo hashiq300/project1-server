@@ -30,7 +30,7 @@ userRouter.get("/address", authenticateToken, async (req, res) => {
                 .status(404)
                 .send({ message: "Address not found", addressFound: false });
         address = address.toObject();
-        res.send({ ...address, addressFound: true });
+        res.send({ address, addressFound: true });
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
@@ -53,7 +53,6 @@ userRouter.post("/address", authenticateToken, async (req, res) => {
           country,
           state,
         });
-        console.log("ll", address);
         res.status(200).json(address);
       } catch (error) {
         res.status(400).json({ error: error.message });
