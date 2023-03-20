@@ -67,7 +67,7 @@ cartRouter.post("/:productid", authenticateToken, async (req, res) => {
                 .send({ message: "Cart successfully created" });
         }
         const product = cart.inventory.find((products) => {
-            return products.product._id.toString() === req.params.productid;
+            return products._id.toString() === req.params.productid;
         });
 
         if (product === undefined) {
@@ -111,7 +111,7 @@ cartRouter.delete("/:productid", authenticateToken, async (req, res) => {
         const prevLen = cart.inventory.length;
 
         const newInventory = cart.inventory.filter(
-            (product) => product.product.toString() !== req.params.productid
+            (product) => product._id.toString() !== req.params.productid
         );
 
         if (prevLen === newInventory.length) {

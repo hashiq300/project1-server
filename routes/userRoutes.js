@@ -87,6 +87,21 @@ userRouter.patch("/", authenticateToken, async (req, res) => {
     }
 });
 
+userRouter.patch("/:userid", authenticateToken, checkAdmin, async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.userid);
+        if(!req.body.userType) return res.status(400).send({ message: "userType not specified"});
+        user.userType = req.body.userType
+        await user.save();
+
+        res.send({ message: "Sucessfully updated user"});
+    } catch (err) {
+        res.status(400).send({ message: `${err.message} at patch/user` });
+    }
+});
+
+
 userRouter.delete("/:id", authenticateToken, checkAdmin, async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);

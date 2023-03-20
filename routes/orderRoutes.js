@@ -12,7 +12,7 @@ orderRouter.get("/", authenticateToken, async (req, res) => {
         const user = await User.findById(req.user._id).select("userType");
 
         if (user && user.userType === "ADMIN") {
-            const orders = await Order.find();
+            const orders = await Order.find().populate("user_id", ["name"]);
             return res.send(orders);
         }
 
