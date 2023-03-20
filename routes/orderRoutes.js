@@ -7,29 +7,10 @@ import Address from "../models/Address.js";
 
 const orderRouter = Router();
 
-orderRouter.get("/:id", authenticateToken, async (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  try {
-    let items = [];
-    const products = await Order.find({ user_id: id }).populate(
-      "order_items.product",
-      ["name", "price", "image"]
-    );
-    products.forEach((item) => {
-      item.order_items.forEach((oneItem) => {
-        items.push({ product: oneItem, status: item.status });
-      });
-    });
-    res.status(200).json(items);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
 
 orderRouter.get("/", authenticateToken, async (req, res) => {
   try {
-    const user = await User.findById(id).select("userType");
+    const user = await User.findById(req.user._id).select("userType");
     if (user && user.userType === "ADMIN") {
       const orders = await Order.find().populate("user_id", ["name"]);
       return res.send(orders);
@@ -49,6 +30,44 @@ orderRouter.get("/", authenticateToken, async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 });
+
+orderRouter.get("/:id", authenticateToken, async (req, res) => {
+  try {
+    let items = [];
+    const products = await Order.find({ user_id: req.user._id }).populate(
+      "order_items.product",
+      ["name", "price", "image"]
+    );
+    products.forEach((item) => {
+      item.order_items.forEach((oneItem) => {
+        items.push({ product: oneItem, status: item.status });
+      });
+    });
+    res.status(200).json(items);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+// orderRouter.get("/:id", authenticateToken, async (req, res) => {
+//   const { id } = req.params;
+//   console.log(id);
+//   try {
+//     let items = [];
+//     const products = await Order.find({ user_id: id }).populate(
+//       "order_items.product",
+//       ["name", "price", "image"]
+//     );
+//     products.forEach((item) => {
+//       item.order_items.forEach((oneItem) => {
+//         items.push({ product: oneItem, status: item.status });
+//       });
+//     });
+//     res.status(200).json(items);
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// });
 
 orderRouter.post("/", authenticateToken, async (req, res) => {
   const { orderItems } = req.body;

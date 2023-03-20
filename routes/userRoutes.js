@@ -38,7 +38,6 @@ userRouter.get("/address", authenticateToken, async (req, res) => {
 
 userRouter.post("/address", authenticateToken, async (req, res) => {
   const { city, landMark, pincode, country, state } = req.body;
-  console.log(req.user._id);
   try {
     let address = await Address.findOne({
       user_id: req.user._id,
