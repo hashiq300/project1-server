@@ -91,6 +91,27 @@ cartRouter.post("/:productid", authenticateToken, async (req, res) => {
     }
 });
 
+cartRouter.patch("/:productid", authenticateToken, async (req, res) => {
+    try {
+        let cart = await Cart.findOne({
+            user_id: req.user._id,
+        });
+       
+        
+        
+        const product = cart.inventory.find((products) => {
+            return products.product._id.toString() === req.params.productid;
+        });
+
+        product.count = req.body.count;
+
+        await cart.save();
+        return res.send({ message: "Cart successfully updated" });
+    } catch (err) {
+        return res.status(400).send({ message: err.message });
+    }
+});
+
 // for deleting user cart
 cartRouter.delete("/", authenticateToken, async (req, res) => {
     try {

@@ -34,7 +34,7 @@ productRouter.post("/", authenticateToken, checkAdmin, async (req, res) => {
 
 productRouter.put("/:id", authenticateToken, checkAdmin, async (req, res) => {
     try {
-        let product = await Product.findById(req.params.id).sort(["createdAt", -1]);
+        let product = await Product.findById(req.params.id);
 
     if (!product)
       return res

@@ -16,13 +16,8 @@ orderRouter.get("/", authenticateToken, async (req, res) => {
       return res.send(orders);
     }
 
-    if (user && user.userType === "ADMIN") {
-      const orders = await Order.find();
-      return res.send(orders);
-    }
-
     const orders = await Order.find({
-      user_id: id,
+      user_id: req.user._id,
     }).populate("order_items.product", ["name", "price", "image"]);
 
     res.send(orders);
